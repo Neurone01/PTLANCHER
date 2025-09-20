@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTLAUNCHER - Gaming Hub</title>
+    <link rel="icon" type="image/png" href="https://gitlab.com/server211/Game/-/raw/master/public/icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --success-color: #10b981;
+            --success-hover: #059669;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --dark-bg: #1f2937;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Section Styles */
+        #login-section { 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 450px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        input[type="text"], input[type="password"] { 
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: var(--transition);
+            background: #fff;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--warning-color);
+            color: white;
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: #d97706;
+            transform: translateY(-1px);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 15px;
+        }
+
+        /* Main Section Styles */
+        #main-section { 
+            display: none; 
+            background: var(--light-bg);
+            min-height: 100vh;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .header {
+            background: var(--card-bg);
+            padding: 20px 0;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--light-bg);
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .online-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Search and Filter */
+        .search-section {
+            margin: 30px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-input, .filter-select {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--card-bg);
+            transition: var(--transition);
+        }
+
+        .search-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+        }
+
+        /* Games Grid */
+        .games-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 25px; 
+            margin-top: 30px;
+        }
+
+        .game-card { 
+            background: var(--card-bg); 
+            border-radius: var(--border-radius); 
+            overflow: hidden;
+            box-shadow: var(--shadow-md); 
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+        }
+
+        .game-content {
+            padding: 20px;
+        }
+
+        .game-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .game-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .game-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .category-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .game-languages {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin: 10px 0;
+            padding: 6px 10px;
+            background: var(--light-bg);
+            border-radius: 6px;
+            border-left: 3px solid var(--success-color);
+        }
+
+        .download-section {
+            margin-top: 15px;
+        }
+
+        .download-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .download-btn:hover {
+            background: var(--success-hover);
+        }
+
+        .download-links {
+            display: none;
+            margin-top: 12px;
+            gap: 8px;
+        }
+
+        .download-links.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .download-link-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .download-link-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Ads Container */
+        .ads-container { 
+            display: none;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            border: 2px dashed var(--warning-color);
+            text-align: center;
+        }
+
+        .ads-container.active {
+            display: block;
+        }
+
+        .ads-content h3 {
+            color: var(--warning-color);
+            margin-bottom: 10px;
+        }
+
+        /* Loading and Empty States */
+        .loading, .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .loading {
+            font-size: 18px;
+        }
+
+        .empty-state {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 2px dashed var(--border-color);
+        }
+
+        /* Account Creation Section */
+        .account-creation {
+            margin-top: 30px;
+            padding: 0;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            animation: scrollHint 3s ease-in-out infinite;
+        }
+
+        .account-creation-header {
+            padding: 20px 20px 15px 20px;
+            background: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .account-creation-content {
+            max-height: 300px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding: 20px;
+        }
+
+        .account-creation-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .account-creation-content::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 3px;
+        }
+
+        .account-creation-content::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+            opacity: 0.7;
+        }
+
+        .account-creation-content::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-hover);
+        }
+
+        .account-creation h3 {
+            color: var(--primary-color);
+            margin: 0 0 15px 0;
+            font-size: 18px;
+        }
+
+        .scroll-hint {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            padding: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 6px;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        .pricing-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .pricing-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pricing-list li:last-child {
+            border-bottom: none;
+        }
+
+        .donation-link {
+            display: inline-block;
+            background: var(--success-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+
+        .donation-link:hover {
+            background: var(--success-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes scrollHint {
+            0%, 100% { 
+                border-color: var(--border-color); 
+            }
+            50% { 
+                border-color: var(--primary-color);
+                box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+            }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        /* Responsive Design Ottimizzato */
+        
+        /* 4K e Ultra Wide (2560px+) */
+        @media (min-width: 2560px) {
+            .container {
+                max-width: 1800px;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 35px;
+            }
+            
+            .game-card {
+                padding: 25px;
+            }
+            
+            .login-card {
+                max-width: 550px;
+                padding: 50px;
+            }
+            
+            .game-image {
+                height: 250px;
+            }
+        }
+        
+        /* Desktop Grande (1920px-2559px) */
+        @media (min-width: 1920px) and (max-width: 2559px) {
+            .container {
+                max-width: 1600px;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 30px;
+            }
+            
+            .login-card {
+                max-width: 500px;
+            }
+        }
+        
+        /* Desktop Standard (1366px-1919px) */
+        @media (min-width: 1366px) and (max-width: 1919px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 25px;
+            }
+        }
+        
+        /* Laptop/Tablet Landscape (1024px-1365px) */
+        @media (min-width: 1024px) and (max-width: 1365px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        /* Tablet Portrait (768px-1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            
+            .search-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .login-card {
+                padding: 35px 25px;
+            }
+        }
+        
+        /* Mobile Large (480px-767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .search-section {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-input, .filter-select {
+                min-width: auto;
+            }
+            
+            .game-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Mobile Small (max-479px) */
+        @media (max-width: 479px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .login-card {
+                padding: 20px 15px;
+                margin: 10px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .game-card {
+                margin: 0 5px;
+            }
+            
+            .game-content {
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 24px;
+            }
+            
+            .account-creation {
+                max-height: 250px;
+                padding: 15px;
+            }
+        }
+        
+        /* Orientamento landscape su mobile */
+        @media screen and (max-width: 768px) and (orientation: landscape) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            
+            .login-card {
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* Prevent inspection */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="no-select">
+
+    <section id="login-section">
+        <div class="login-card">
+            <div class="login-header">
+                <h2>PTLAUNCHER</h2>
+                <p>Accedi alla tua libreria di giochi</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Inserisci il tuo username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Inserisci la tua password">
+            </div>
+            
+            <button class="btn btn-primary" onclick="login()">
+                Accedi
+            </button>
+            
+            <div class="divider">
+                <span>oppure</span>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="enterWithAds()">
+                Entra con Pubblicità
+            </button>
+            
+            <div class="account-creation">
+                <div class="account-creation-header">
+                    <h3>💎 Non hai un account Premium?</h3>
+                </div>
+                <div class="account-creation-content">
+                    <div class="scroll-hint">📜 Scorri per leggere tutti i dettagli</div>
+                    <p><strong>Ottieni accesso illimitato a tutti i giochi!</strong></p>
+                
+                <p><strong>Piani disponibili:</strong></p>
+                <ul class="pricing-list">
+                    <li>🗓️ <strong>1 mese:</strong> €3,50</li>
+                    <li>📅 <strong>3 mesi:</strong> €8,60</li>
+                    <li>🎯 <strong>1 anno:</strong> €32,00</li>
+                    <li>♾️ <strong>Per sempre:</strong> €52,50 (pagamento unico)</li>
+                </ul>
+                
+                <p><strong>Come attivare l'account:</strong></p>
+                <ol>
+                    <li>Scegli il piano che preferisci</li>
+                    <li>Effettua la donazione includendo Username e Password nel messaggio</li>
+                    <li>L'account verrà attivato entro 2 giorni lavorativi</li>
+                </ol>
+                
+                    <a href="https://streamelements.com/parlauncher/tip" target="_blank" class="donation-link">
+                        🚀 Attiva Premium
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="main-section">
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">🎮 PTLAUNCHER</div>
+                    <div class="user-info">
+                        <div class="online-indicator"></div>
+                        <span id="user-status">Utente Online</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="ads-container" id="ads-container">
+                <div class="ads-content">
+                    <h3>⚠️ Modalità Gratuita con Pubblicità</h3>
+                    <p>🎯 <a href="#" style="color: var(--primary-color); font-weight: 600;">Clicca qui per un'offerta speciale sui giochi!</a></p>
+                    <p>🌟 <a href="#" style="color: var(--success-color); font-weight: 600;">Visita il nostro sponsor per sconti esclusivi!</a></p>
+                    <small>💡 Passa a Premium per rimuovere le pubblicità</small>
+                </div>
+            </div>
+
+            <div class="search-section">
+                <input type="text" id="search-bar" class="search-input" placeholder="🔍 Cerca giochi..." oninput="filterGames()">
+                <select id="category-filter" class="filter-select" onchange="filterGames()">
+                    <option value="">📂 Tutte le categorie</option>
+                </select>
+            </div>
+
+            <div class="games-grid" id="game-grid">
+                <div class="loading">🎮 Caricamento libreria giochi...</div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Variabili globali per il caricamento dinamico
+        let games = [];
+        let accounts = {};
+        let loggedInUser = null;
+        const currentDate = new Date('2025-09-20');
+
+        // Sicurezza: disabilita context menu e shortcuts
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', event => {
+            const forbidden = [
+                {ctrl: true, shift: true, key: 'I'},
+                {ctrl: true, shift: true, key: 'J'},
+                {ctrl: true, key: 'U'},
+                {key: 'F12'}
+            ];
+            
+            if (forbidden.some(combo => 
+                (combo.ctrl ? event.ctrlKey : true) && 
+                (combo.shift ? event.shiftKey : true) && 
+                event.key === combo.key
+            )) {
+                event.preventDefault();
+            }
+        });
+
+        // Caricamento dinamico dei file JSON con debug avanzato
+        async function loadAccountsData() {
+            try {
+                showLoadingMessage('🔐 Caricamento account...');
+                console.log('🔍 Tentativo di caricamento accounts.json...');
+                
+                const response = await fetch('https://gitlab.com/server211/Game/-/raw/master/public/accounts.json');
+                console.log('📡 Response status accounts:', response.status, response.statusText);
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                accounts = await response.json();
+                console.log('✅ Account caricati con successo:', Object.keys(accounts).length, 'utenti');
+                console.log('👥 Account disponibili:', Object.keys(accounts));
+                
+            } catch (error) {
+                console.error('❌ Errore nel caricamento di accounts.json:', error);
+                showAlert('⚠️ Errore nel caricamento degli account. Modalità offline attiva.', 'warning');
+                
+                // Fallback con account dal tuo JSON reale
+                accounts = {
+                    "admin": "password_segreta_123",
+                    "utente_premium": {
+                        "password": "pass_premium",
+                        "expires": "2024-12-31"
+                    },
+                    "utente_permanente": {
+                        "password": "altra_pass"
+                    }
+                };
+                console.log('🔄 Utilizzando account di fallback');
+            }
+        }
+
+        async function loadGamesData() {
+            try {
+                const grid = document.getElementById('game-grid');
+                grid.innerHTML = '<div class="loading">🎮 Caricamento libreria giochi dal server...</div>';
+                
+                console.log('🔍 Tentativo di caricamento games.json...');
+                const response = await fetch('https://gitlab.com/server211/Game/-/raw/master/public/games.json');
+                console.log('📡 Response status games:', response.status, response.statusText);
+                
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const rawData = await response.text();
+                console.log('📄 Dati ricevuti (primi 200 caratteri):', rawData.substring(0, 200));
+                
+                games = JSON.parse(rawData);
+                console.log(`✅ Caricati ${games.length} giochi con successo`);
+                console.log('🎮 Primi 3 giochi:', games.slice(0, 3).map(g => g.name));
+                
+                populateCategories();
+                
+                // Se siamo già nella sezione principale, mostra i giochi
+                if (document.getElementById('main-section').style.display === 'block') {
+                    displayGames();
+                } else {
+                    console.log('⏳ Giochi caricati ma sezione principale non ancora visibile');
+                }
+                
+                // Rimuovi il messaggio di caricamento
+                const loadingEl = grid.querySelector('.loading');
+                if (loadingEl) loadingEl.remove();
+                
+                showAlert(`🎯 ${games.length} giochi caricati con successo!`, 'success');
+                
+            } catch (error) {
+                console.error('❌ Errore nel caricamento di games.json:', error);
+                console.error('📄 Dettagli errore:', error.message, error.stack);
+                
+                const grid = document.getElementById('game-grid');
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>❌ Errore di Connessione</h3>
+                        <p>Impossibile caricare la libreria giochi dal server.</p>
+                        <p><strong>Errore:</strong> ${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadGamesData()" style="margin-top: 15px; width: auto; padding: 10px 20px;">
+                            🔄 Riprova
+                        </button>
+                        <button class="btn" onclick="debugInfo()" style="margin-top: 10px; width: auto; padding: 10px 20px; background: var(--warning-color);">
+                            🔍 Debug Info
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function showLoadingMessage(message) {
+            const existingAlert = document.querySelector('.loading-alert');
+            if (existingAlert) existingAlert.remove();
+            
+            const alert = document.createElement('div');
+            alert.className = 'loading-alert';
+            alert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary-color);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                font-weight: 500;
+                animation: slideInDown 0.3s ease-out;
+            `;
+            alert.textContent = message;
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                if (alert.parentNode) alert.remove();
+            }, 3000);
+        }
+
+        // Inizializzazione con debug e test connettività
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('🚀 PTLAUNCHER iniziato - Debug Mode ON');
+            
+            setupScrollHints();
+            
+            // Test connettività
+            if (navigator.onLine) {
+                await testConnectivity();
+            } else {
+                console.warn('⚠️ Dispositivo offline');
+            }
+            
+            // Carica account e giochi in parallelo con timeout
+            try {
+                await Promise.race([
+                    Promise.all([
+                        loadAccountsData(),
+                        loadGamesData()
+                    ]),
+                    new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout')), 15000)
+                    )
+                ]);
+                
+                showAlert('🚀 PTLAUNCHER caricato e pronto!', 'success');
+                console.log('✅ Caricamento completato con successo');
+                
+            } catch (error) {
+                console.error('❌ Errore durante l\'inizializzazione:', error);
+                showAlert('⚠️ Caricamento parziale. Alcune funzionalità potrebbero non funzionare.', 'warning');
+            }
+        });
+
+        function setupScrollHints() {
+            const accountCreationContent = document.querySelector('.account-creation-content');
+            const scrollHint = document.querySelector('.scroll-hint');
+            
+            if (accountCreationContent && scrollHint) {
+                accountCreationContent.addEventListener('scroll', function() {
+                    if (this.scrollTop > 10) {
+                        scrollHint.style.display = 'none';
+                    }
+                });
+                
+                // Auto-scroll dopo 3 secondi per mostrare che è scrollabile
+                setTimeout(() => {
+                    accountCreationContent.scrollTo({
+                        top: 50,
+                        behavior: 'smooth'
+                    });
+                    
+                    setTimeout(() => {
+                        accountCreationContent.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }, 1500);
+                }, 3000);
+            }
+        }
+
+        function populateCategories() {
+            const categorySet = new Set();
+            games.forEach(game => {
+                // Alcuni giochi potrebbero non avere categorie
+                if (game.category && Array.isArray(game.category)) {
+                    game.category.forEach(cat => categorySet.add(cat));
+                }
+            });
+            
+            const filter = document.getElementById('category-filter');
+            // Pulisci opzioni esistenti (tranne la prima)
+            while (filter.children.length > 1) {
+                filter.removeChild(filter.lastChild);
+            }
+            
+            const sortedCategories = Array.from(categorySet).sort();
+            sortedCategories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = `📁 ${cat}`;
+                filter.appendChild(option);
+            });
+            
+            console.log(`✅ Caricate ${sortedCategories.length} categorie`);
+        }
+
+        function filterGames() {
+            const search = document.getElementById('search-bar').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            
+            const filtered = games.filter(game => {
+                const matchesSearch = game.name.toLowerCase().includes(search) || 
+                                    game.description.toLowerCase().includes(search);
+                const matchesCategory = !category || 
+                                      (game.category && game.category.includes(category));
+                return matchesSearch && matchesCategory;
+            });
+            
+            displayGames(filtered);
+            
+            // Mostra statistiche di ricerca
+            if (search || category) {
+                showAlert(`🔍 Trovati ${filtered.length} giochi`, 'info');
+            }
+        }
+
+        // Simulazione contatore utenti online avanzato
+        function updateOnlineUserCounter() {
+            const baseUsers = 15;
+            const randomVariation = Math.floor(Math.random() * 25);
+            const onlineCount = baseUsers + randomVariation;
+            
+            const userStatus = document.getElementById('user-status');
+            if (userStatus && loggedInUser) {
+                const premiumStatus = accounts[loggedInUser] && 
+                                    typeof accounts[loggedInUser] === 'object' ? 
+                                    'Premium' : 'Basic';
+                userStatus.textContent = `🎮 ${loggedInUser} (${premiumStatus}) • ${onlineCount} online`;
+            } else if (userStatus) {
+                userStatus.textContent = `👤 Utente Anonimo • ${onlineCount} online`;
+            }
+        }
+
+        // Aggiorna contatore ogni 30 secondi
+        setInterval(updateOnlineUserCounter, 30000);
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if (!username || !password) {
+                showAlert('❌ Inserisci username e password', 'error');
+                return;
+            }
+            
+            if (!accounts[username]) {
+                showAlert('❌ Username non trovato. Controlla le credenziali.', 'error');
+                return;
+            }
+            
+            const account = accounts[username];
+            const storedPassword = typeof account === 'object' ? account.password : account;
+            
+            if (storedPassword !== password) {
+                showAlert('❌ Password errata. Riprova.', 'error');
+                return;
+            }
+            
+            // Controlla scadenza account
+            if (typeof account === 'object' && account.expires) {
+                const expireDate = new Date(account.expires);
+                const today = new Date();
+                
+                if (expireDate < today) {
+                    showAlert('⚠️ Il tuo abbonamento è scaduto. Rinnovalo per continuare.', 'warning');
+                    return;
+                }
+                
+                // Avviso se l'account scade presto (entro 30 giorni)
+                const daysUntilExpiry = Math.ceil((expireDate - today) / (1000 * 60 * 60 * 24));
+                if (daysUntilExpiry <= 30 && daysUntilExpiry > 0) {
+                    setTimeout(() => {
+                        showAlert(`⏰ Il tuo abbonamento scade tra ${daysUntilExpiry} giorni`, 'warning');
+                    }, 2000);
+                }
+            }
+            
+            loggedInUser = username;
+            showAlert(`✅ Benvenuto ${username}! Accesso effettuato con successo`, 'success');
+            switchToMainSection();
+            
+            // Aggiorna contatore utenti
+            const accountType = typeof account === 'object' ? 'Premium' : 'Basic';
+            updateUserStatus(`🎮 ${username} (${accountType})`);
+            updateOnlineUserCounter();
+        }
+
+        function enterWithAds() {
+            showAlert('🎯 Modalità gratuita attivata. Pubblicità visibili per supportare il servizio.', 'info');
+            switchToMainSection(true);
+            updateUserStatus('👤 Utente Anonimo (Gratuito)');
+            updateOnlineUserCounter();
+        }
+
+        function switchToMainSection(showAds = false) {
+            console.log('🔄 Passaggio alla sezione principale, showAds:', showAds);
+            
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('main-section').style.display = 'block';
+            
+            if (showAds) {
+                document.getElementById('ads-container').classList.add('active');
+            }
+            
+            // Se i giochi sono già caricati, mostrali immediatamente
+            if (games.length > 0) {
+                console.log('✅ Giochi già caricati, visualizzazione immediata');
+                displayGames();
+            } else {
+                // Se non sono ancora caricati, mostra loading e attendi
+                console.log('⏳ Giochi non ancora caricati, in attesa...');
+                const grid = document.getElementById('game-grid');
+                grid.innerHTML = '<div class="loading">🎮 Caricamento giochi in corso...</div>';
+                
+                // Controlla ogni 500ms se i giochi sono caricati
+                const checkGames = setInterval(() => {
+                    if (games.length > 0) {
+                        console.log('✅ Giochi ora disponibili, visualizzazione...');
+                        clearInterval(checkGames);
+                        displayGames();
+                        const loading = grid.querySelector('.loading');
+                        if (loading) loading.remove();
+                    }
+                }, 500);
+                
+                // Timeout dopo 10 secondi
+                setTimeout(() => {
+                    if (games.length === 0) {
+                        console.warn('⚠️ Timeout caricamento giochi');
+                        clearInterval(checkGames);
+                        grid.innerHTML = `
+                            <div class="empty-state">
+                                <h3>⏰ Timeout</h3>
+                                <p>I giochi stanno impiegando troppo tempo a caricare.</p>
+                                <button class="btn btn-primary" onclick="loadGamesData()" style="margin-top: 15px; width: auto; padding: 10px 20px;">
+                                    🔄 Ricarica Giochi
+                                </button>
+                            </div>
+                        `;
+                    }
+                }, 10000);
+            }
+        }
+
+        function updateUserStatus(status) {
+            const statusElement = document.getElementById('user-status');
+            if (statusElement) {
+                statusElement.textContent = status;
+            }
+        }
+
+        function displayGames(filteredGames = games) {
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '';
+            
+            if (filteredGames.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>🔍 Nessun gioco trovato</h3>
+                        <p>Prova a modificare i filtri di ricerca</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredGames.forEach((game, index) => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.style.animationDelay = `${index * 0.05}s`;
+                
+                // Gestisci le categorie (alcuni giochi potrebbero non averle)
+                const categories = game.category || [];
+                const categoriesHtml = categories.map(cat => 
+                    `<span class="category-tag">${cat}</span>`
+                ).join('');
+                
+                // Gestisci le lingue disponibili
+                const languages = game.languages || [];
+                const languagesHtml = languages.length > 0 ? 
+                    `<div class="game-languages">🌐 ${languages.join(', ')}</div>` : '';
+                
+                card.innerHTML = `
+                    <img src="${game.image_url}" alt="${game.name}" class="game-image" loading="lazy" 
+                         onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMDAgMTAwQzIyMi4wOTEgMTAwIDI0MCA4Mi4wOTEzIDI0MCA2MEMyNDAgMzcuOTA4NyAyMjIuMDkxIDIwIDIwMCAyMEMxNzcuOTA5IDIwIDE2MCAzNy45MDg3IDE2MCA2MEMxNjAgODIuMDkxMyAxNzcuOTA5IDEwMCAyMDAgMTAwWiIgZmlsbD0iIzlDQTNBRiIvPgo8cGF0aCBkPSJNMjAwIDE4MEM3Ny4yNSAxODAgMTYwIDI2MCAyMDAgMjYwQzI0MCAyNjAgMjQwIDE4MCAyMDAgMTgwWiIgZmlsbD0iIzlDQTNBRiIvPgo8L3N2Zz4K'">
+                    <div class="game-content">
+                        <h3 class="game-title">${game.name}</h3>
+                        <p class="game-description">${game.description}</p>
+                        ${categories.length > 0 ? `<div class="game-categories">${categoriesHtml}</div>` : ''}
+                        ${languagesHtml}
+                        <div class="download-section">
+                            <button class="download-btn" onclick="toggleDownloadLinks(this, ${index})">
+                                📥 Scarica Gioco
+                            </button>
+                            <div class="download-links" id="links-${index}"></div>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+
+                // Aggiungi i pulsanti download basati sulla struttura JSON reale
+                const linksDiv = document.getElementById(`links-${index}`);
+                
+                // Download link singolo
+                if (game.download_link) {
+                    const btn = document.createElement('button');
+                    btn.className = 'download-link-btn';
+                    btn.textContent = '⬇️ Download Completo';
+                    btn.onclick = () => handleDownload(game.download_link, game.name);
+                    linksDiv.appendChild(btn);
+                }
+                
+                // Download links multipli (per giochi divisi in parti)
+                if (game.download_links && Array.isArray(game.download_links)) {
+                    game.download_links.forEach(link => {
+                        const btn = document.createElement('button');
+                        btn.className = 'download-link-btn';
+                        btn.textContent = `📦 ${link.part || 'Download'}`;
+                        btn.onclick = () => handleDownload(link.url, `${game.name} - ${link.part || 'Parte'}`);
+                        linksDiv.appendChild(btn);
+                    });
+                }
+
+                // Se il gioco ha un video trailer, aggiungi il pulsante
+                if (game.video_url) {
+                    const videoBtn = document.createElement('button');
+                    videoBtn.className = 'download-link-btn';
+                    videoBtn.style.background = '#e74c3c';
+                    videoBtn.textContent = '🎬 Guarda Trailer';
+                    videoBtn.onclick = () => handleVideoPlay(game.video_url, game.name);
+                    linksDiv.appendChild(videoBtn);
+                }
+
+                // Se non ci sono link di download, mostra messaggio
+                if (!game.download_link && (!game.download_links || game.download_links.length === 0)) {
+                    const noDownload = document.createElement('p');
+                    noDownload.style.cssText = 'color: var(--text-secondary); font-size: 12px; margin: 10px 0; text-align: center;';
+                    noDownload.textContent = '📦 Download non ancora disponibile';
+                    linksDiv.appendChild(noDownload);
+                }
+            });
+            
+            // Aggiungi animazione di entrata
+            const cards = grid.querySelectorAll('.game-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.4s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        }
+
+        function handleVideoPlay(videoUrl, gameName) {
+            // Crea un modal per il video
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s ease-out;
+            `;
+            
+            modal.innerHTML = `
+                <div style="position: relative; max-width: 90%; max-height: 90%;">
+                    <video controls autoplay style="width: 100%; height: auto; border-radius: 8px;">
+                        <source src="${videoUrl}" type="video/webm">
+                        Il tuo browser non supporta i video HTML5.
+                    </video>
+                    <button onclick="this.closest('div').parentNode.remove()" 
+                            style="position: absolute; top: -40px; right: 0; background: var(--danger-color); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: 600;">
+                        ✕ Chiudi
+                    </button>
+                </div>
+            `;
+            
+            // Chiudi modal cliccando fuori
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+            
+            document.body.appendChild(modal);
+            showAlert(`🎬 Riproduzione trailer: ${gameName}`, 'info');
+        }
+
+        function toggleDownloadLinks(button, gameIndex) {
+            const links = document.getElementById(`links-${gameIndex}`);
+            const isActive = links.classList.contains('active');
+            
+            // Chiudi tutti gli altri link aperti
+            document.querySelectorAll('.download-links.active').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                links.classList.add('active');
+                button.textContent = '📁 Nascondi Link';
+            } else {
+                button.textContent = '📥 Scarica Gioco';
+            }
+        }
+
+        function handleDownload(url, gameName) {
+            if (url === '#') {
+                showAlert(`🚀 Avvio download: ${gameName}`, 'info');
+                // In un ambiente reale, qui apriresti l'URL di download
+                return;
+            }
+            
+            window.open(url, '_blank');
+            showAlert(`📥 Download avviato: ${gameName}`, 'success');
+        }
+
+        function filterGames() {
+            const search = document.getElementById('search-bar').value.toLowerCase();
+            const category = document.getElementById('category-filter').value;
+            
+            const filtered = games.filter(game => {
+                const matchesSearch = game.name.toLowerCase().includes(search) || 
+                                    game.description.toLowerCase().includes(search);
+                const matchesCategory = !category || game.category.includes(category);
+                return matchesSearch && matchesCategory;
+            });
+            
+            displayGames(filtered);
+        }
+
+        function showAlert(message, type = 'info') {
+            // Rimuovi alert esistenti
+            const existingAlert = document.querySelector('.alert-toast');
+            if (existingAlert) existingAlert.remove();
+            
+            const alert = document.createElement('div');
+            alert.className = `alert-toast ${type}`;
+            alert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'var(--success-color)' : 
+                          type === 'error' ? 'var(--danger-color)' : 
+                          type === 'warning' ? 'var(--warning-color)' : 'var(--primary-color)'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                font-weight: 500;
+                max-width: 300px;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            alert.textContent = message;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        // Aggiungi le animazioni CSS per gli alert
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+            
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Simulazione contatore utenti online
+        setInterval(() => {
+            const onlineCount = Math.floor(Math.random() * 50) + 10;
+            if (loggedInUser) {
+                updateUserStatus(`🎮 ${loggedInUser} (Premium) - ${onlineCount} online`);
+            }
+        }, 30000);
+
+    </script>
+</body>
+</html>
