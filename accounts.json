@@ -1,0 +1,14 @@
+{
+  "admin": "password_segreta_123",
+  "utente_premium": {
+    "password": "pass_premium",
+    "expires": "2024-12-31"
+  },
+  "utente_scaduto": {
+    "password": "vecchia_password",
+    "expires": "2023-01-01"
+  },
+  "utente_permanente": {
+    "password": "altra_pass"
+  }
+}
