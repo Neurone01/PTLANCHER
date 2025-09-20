@@ -1,7 +1,7 @@
 {
-  "admin": "password_segreta_123",
-  "utente_premium": {
-    "password": "pass_premium",
+  "admin": "admin",
+  "luca": {
+    "password": "luca1234",
     "expires": "2024-12-31"
   },
   "utente_scaduto": {
