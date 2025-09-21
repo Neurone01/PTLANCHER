@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PTLAUNCHER - Gaming Hub</title>
-    <link rel="icon" type="image/png" href="https://gitlab.com/server211/Game/-/raw/master/public/icon.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/Neurone01/PTLANCHER/refs/heads/main/icon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -831,92 +831,182 @@
             }
         });
 
-        // Caricamento dinamico dei file JSON con debug avanzato
+        // Account loading con multiple strategie
         async function loadAccountsData() {
-            try {
-                showLoadingMessage('🔐 Caricamento account...');
-                console.log('🔍 Tentativo di caricamento accounts.json...');
+            const strategies = [
+                'https://neurone01.github.io/PTLANCHER/accounts.json',
+                'https://raw.githubusercontent.com/Neurone01/PTLANCHER/refs/heads/main/accounts.json',
+                'https://cdn.jsdelivr.net/gh/Neurone01/PTLANCHER@main/accounts.json'
+            ];
+            
+            for (let i = 0; i < strategies.length; i++) {
+                const url = strategies[i];
+                console.log(`🔐 Strategia ${i + 1}: Tentativo caricamento accounts da ${url}`);
                 
-                const response = await fetch('https://gitlab.com/server211/Game/-/raw/master/public/accounts.json');
-                console.log('📡 Response status accounts:', response.status, response.statusText);
-                
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                accounts = await response.json();
-                console.log('✅ Account caricati con successo:', Object.keys(accounts).length, 'utenti');
-                console.log('👥 Account disponibili:', Object.keys(accounts));
-                
-            } catch (error) {
-                console.error('❌ Errore nel caricamento di accounts.json:', error);
-                showAlert('⚠️ Errore nel caricamento degli account. Modalità offline attiva.', 'warning');
-                
-                // Fallback con account dal tuo JSON reale
-                accounts = {
-                    "admin": "password_segreta_123",
-                    "utente_premium": {
-                        "password": "pass_premium",
-                        "expires": "2024-12-31"
-                    },
-                    "utente_permanente": {
-                        "password": "altra_pass"
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 3000);
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    console.log(`📡 Response status accounts: ${response.status} ${response.statusText}`);
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    accounts = await response.json();
+                    console.log(`✅ Account caricati con successo dalla strategia ${i + 1}:`, Object.keys(accounts).length, 'utenti');
+                    console.log('👥 Account disponibili:', Object.keys(accounts));
+                    return; // Successo - esci dal loop
+                    
+                } catch (error) {
+                    console.error(`❌ Strategia account ${i + 1} fallita:`, error.message);
+                    
+                    if (i === strategies.length - 1) {
+                        // Tutte le strategie fallite - usa dati hardcoded
+                        console.log('🚨 Tutte le strategie account fallite - usando fallback');
+                        accounts = {
+                            "admin": "password_segreta_123",
+                            "utente_premium": {
+                                "password": "pass_premium",
+                                "expires": "2024-12-31"
+                            },
+                            "utente_permanente": {
+                                "password": "altra_pass"
+                            }
+                        };
+                        showAlert('⚠️ Account caricati in modalità offline.', 'warning');
                     }
-                };
-                console.log('🔄 Utilizzando account di fallback');
+                }
             }
         }
 
+        // Caricamento dinamico con multiple strategie
         async function loadGamesData() {
-            try {
-                const grid = document.getElementById('game-grid');
-                grid.innerHTML = '<div class="loading">🎮 Caricamento libreria giochi dal server...</div>';
+            const strategies = [
+                'https://neurone01.github.io/PTLANCHER/games.json',
+                'https://raw.githubusercontent.com/Neurone01/PTLANCHER/refs/heads/main/games.json',
+                'https://cdn.jsdelivr.net/gh/Neurone01/PTLANCHER@main/games.json'
+            ];
+            
+            const grid = document.getElementById('game-grid');
+            grid.innerHTML = '<div class="loading">🎮 Caricamento libreria giochi dal server...</div>';
+            
+            for (let i = 0; i < strategies.length; i++) {
+                const url = strategies[i];
+                console.log(`🔍 Strategia ${i + 1}: Tentativo caricamento da ${url}`);
                 
-                console.log('🔍 Tentativo di caricamento games.json...');
-                const response = await fetch('https://gitlab.com/server211/Game/-/raw/master/public/games.json');
-                console.log('📡 Response status games:', response.status, response.statusText);
-                
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                const rawData = await response.text();
-                console.log('📄 Dati ricevuti (primi 200 caratteri):', rawData.substring(0, 200));
-                
-                games = JSON.parse(rawData);
-                console.log(`✅ Caricati ${games.length} giochi con successo`);
-                console.log('🎮 Primi 3 giochi:', games.slice(0, 3).map(g => g.name));
-                
-                populateCategories();
-                
-                // Se siamo già nella sezione principale, mostra i giochi
-                if (document.getElementById('main-section').style.display === 'block') {
-                    displayGames();
-                } else {
-                    console.log('⏳ Giochi caricati ma sezione principale non ancora visibile');
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    
+                    const response = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache',
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    console.log(`📡 Response status: ${response.status} ${response.statusText}`);
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const rawData = await response.text();
+                    console.log('📄 Dati ricevuti (primi 200 caratteri):', rawData.substring(0, 200));
+                    
+                    if (!rawData.trim().startsWith('[')) {
+                        throw new Error('Invalid JSON format - not an array');
+                    }
+                    
+                    games = JSON.parse(rawData);
+                    console.log(`✅ Caricati ${games.length} giochi con successo dalla strategia ${i + 1}`);
+                    console.log('🎮 Primi 3 giochi:', games.slice(0, 3).map(g => g.name));
+                    
+                    populateCategories();
+                    
+                    if (document.getElementById('main-section').style.display === 'block') {
+                        displayGames();
+                    }
+                    
+                    const loadingEl = grid.querySelector('.loading');
+                    if (loadingEl) loadingEl.remove();
+                    
+                    showAlert(`🎯 ${games.length} giochi caricati con successo!`, 'success');
+                    return; // Successo - esci dal loop
+                    
+                } catch (error) {
+                    console.error(`❌ Strategia ${i + 1} fallita:`, error.message);
+                    
+                    if (i === strategies.length - 1) {
+                        // Tutte le strategie fallite - usa dati hardcoded come ultima risorsa
+                        console.log('🚨 Tutte le strategie fallite - caricamento dati integrati');
+                        games = getHardcodedGames();
+                        populateCategories();
+                        
+                        if (document.getElementById('main-section').style.display === 'block') {
+                            displayGames();
+                        }
+                        
+                        const loadingEl = grid.querySelector('.loading');
+                        if (loadingEl) loadingEl.remove();
+                        
+                        showAlert(`⚠️ Caricati ${games.length} giochi di esempio (modalità offline)`, 'warning');
+                        return;
+                    }
                 }
-                
-                // Rimuovi il messaggio di caricamento
-                const loadingEl = grid.querySelector('.loading');
-                if (loadingEl) loadingEl.remove();
-                
-                showAlert(`🎯 ${games.length} giochi caricati con successo!`, 'success');
-                
-            } catch (error) {
-                console.error('❌ Errore nel caricamento di games.json:', error);
-                console.error('📄 Dettagli errore:', error.message, error.stack);
-                
-                const grid = document.getElementById('game-grid');
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <h3>❌ Errore di Connessione</h3>
-                        <p>Impossibile caricare la libreria giochi dal server.</p>
-                        <p><strong>Errore:</strong> ${error.message}</p>
-                        <button class="btn btn-primary" onclick="loadGamesData()" style="margin-top: 15px; width: auto; padding: 10px 20px;">
-                            🔄 Riprova
-                        </button>
-                        <button class="btn" onclick="debugInfo()" style="margin-top: 10px; width: auto; padding: 10px 20px; background: var(--warning-color);">
-                            🔍 Debug Info
-                        </button>
-                    </div>
-                `;
             }
+        }
+
+        // Dati hardcoded come fallback estremo
+        function getHardcodedGames() {
+            return [
+                {
+                    "name": "A Hat in Time",
+                    "image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/253230/header.jpg",
+                    "download_link": "https://pd.cybar.xyz/MyAhnb3n",
+                    "category": ["3D", "Indie", "Avventura"],
+                    "description": "A Hat in Time è un platform 3D carino come il collo con una bambina che cuce cappelli per poteri malvagi!",
+                    "languages": ["Italiano", "Inglese", "Francese"]
+                },
+                {
+                    "name": "Cuphead",
+                    "image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/header.jpg",
+                    "download_link": "https://download2297.mediafire.com/49357anz5h0gysJboxzfucOeoLsq1CDDHG9TsfVSl02Uy4Qjc7WGzlEoXTkOM3Syc61FWe6WvCTisrNnUW53Cwn_bbj9zuNHZ7FN1cVHGgZKSf16OjCKTwSCUon6j1fl3yLsFd1-D8rL9D49xBK0SzqJNsDV_RyoGyCSATFdp3vGjRQE/8tkramtjqqqyqg7/Cuphead.v9318602.7z",
+                    "category": ["Difficili", "Cartoni animati", "Co-op"],
+                    "description": "Cuphead è un classico action fortemente incentrato sulle battaglie contro i boss.",
+                    "languages": ["Italiano", "Inglese", "Francese"]
+                },
+                {
+                    "name": "Celeste",
+                    "image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/504230/header.jpg",
+                    "download_link": "https://pd.cybar.xyz/Z9EiiPES",
+                    "category": ["2D", "Indie", "Difficili"],
+                    "description": "Aiuta Madeline ad affrontare i suoi demoni in un viaggio verso la cima del Monte Celeste.",
+                    "languages": ["Italiano", "Inglese", "Francese"]
+                },
+                {
+                    "name": "Terraria",
+                    "image_url": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/105600/header.jpg",
+                    "download_link": "https://pd.cybar.xyz/xqEmJe74",
+                    "category": ["Sandbox", "2D"],
+                    "description": "Scava, combatti, esplora, costruisci! Niente è impossibile in questo gioco d'avventura pieno di azione.",
+                    "languages": ["Italiano", "Inglese", "Francese", "Spagnolo", "Tedesco"]
+                },
+                {
+                    "name": "Minecraft",
+                    "image_url": "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/PDP-Hero_OV-Standard_16x9.jpg",
+                    "download_link": "https://files.catbox.moe/ane36d.zip",
+                    "category": ["Sandbox", "Costruzioni", "Avventura"],
+                    "description": "Minecraft è un videogioco sandbox dove i giocatori possono costruire ed esplorare.",
+                    "languages": ["Italiano", "Inglese", "Francese", "Spagnolo", "Tedesco"]
+                }
+            ];
         }
 
         function showLoadingMessage(message) {
